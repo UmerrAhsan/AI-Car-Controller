@@ -1,0 +1,41 @@
+  def gear(self):
+        rpm = self.state.getRpm()
+        gear = self.state.getGear()
+
+        if self.prev_rpm == None:
+            up = True
+        else:
+            if (self.prev_rpm - rpm) < 0:
+                up = True
+            else:
+                up = False
+
+        if up and rpm > 7000:
+            gear += 1
+
+        if not up and rpm < 3000:
+            gear -= 1
+
+        self.control.setGear(gear)
+
+    def speed(self):
+        speed = self.state.getSpeedX()
+        accel = self.control.getAccel()
+
+        if speed < self.max_speed:
+            accel += 0.1
+            if accel > 1:
+                accel = 1.0
+        else:
+            accel -= 0.1
+            if accel < 0:
+                accel = 0.0
+
+        self.control.setAccel(accel)
+
+
+                else:
+            if self.steer_value > 0:
+                self.steer_value -= 0.2
+            elif self.steer_value < 0:
+                self.steer_value += 0.2
